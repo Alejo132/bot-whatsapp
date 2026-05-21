@@ -12,6 +12,34 @@ from twilio.rest import Client as TwilioClient
 load_dotenv()
 
 app = Flask(__name__)
+
+# Inicializar DB al arrancar (funciona con gunicorn también)
+def init_db():
+    conn = sqlite3.connect("conversaciones.db")
+    c = conn.cursor()
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS mensajes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            numero TEXT NOT NULL,
+            rol TEXT NOT NULL,
+            contenido TEXT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS stats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            numero TEXT NOT NULL,
+            primer_contacto DATETIME DEFAULT CURRENT_TIMESTAMP,
+            ultimo_contacto DATETIME DEFAULT CURRENT_TIMESTAMP,
+            total_mensajes INTEGER DEFAULT 0,
+            reservas INTEGER DEFAULT 0
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_db()
 client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 twilio = TwilioClient(os.getenv("TWILIO_ACCOUNT_SID"), os.getenv("TWILIO_AUTH_TOKEN"))
 
@@ -91,32 +119,6 @@ MENU_BIENVENIDA = f"""¡Hola! 👋 Bienvenido a *{NEGOCIO['nombre']}*.
 
 
 # ── Base de datos ──────────────────────────────────────────────────────────────
-def init_db():
-    conn = sqlite3.connect("conversaciones.db")
-    c = conn.cursor()
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS mensajes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            numero TEXT NOT NULL,
-            rol TEXT NOT NULL,
-            contenido TEXT NOT NULL,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    c.execute("""
-        CREATE TABLE IF NOT EXISTS stats (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            numero TEXT NOT NULL,
-            primer_contacto DATETIME DEFAULT CURRENT_TIMESTAMP,
-            ultimo_contacto DATETIME DEFAULT CURRENT_TIMESTAMP,
-            total_mensajes INTEGER DEFAULT 0,
-            reservas INTEGER DEFAULT 0
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-
 def guardar_mensaje(numero, rol, contenido):
     conn = sqlite3.connect("conversaciones.db")
     c = conn.cursor()
