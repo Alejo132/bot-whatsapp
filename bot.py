@@ -47,74 +47,77 @@ ZONA_HORARIA = pytz.timezone("America/Montevideo")
 
 # ── Configuración del negocio ──────────────────────────────────────────────────
 NEGOCIO = {
-    "nombre": "Fundamento Pizza",
-    "tipo": "pizzería artesanal",
+    "nombre": "Beauty Planet",
+    "tipo": "spa y centro estético",
     "locales": {
-        "Pocitos": "Av. Brasil 2715, tel: 093 551 815",
-        "Cordón": "Canelones 1890, tel: 093 551 815",
-        "Ciudad Vieja": "Piedras 402, tel: 093 551 815",
+        "Punta Carretas": "Punta Carretas Shopping, Nivel 1, José Ellauri 350, tel: 2711 9115",
+        "Tres Cruces": "Shopping Tres Cruces, Julio Herrera y Obes 1234",
+        "Centro": "Blanca del Tabaré 2990",
     },
-    "horario": "todos los días de 19:00 a 01:00",
-    "horario_apertura": time(19, 0),
-    "horario_cierre": time(1, 0),
-    "menu": """
-    🍕 PIZZAS ARTESANALES
-    - Margherita: $450
-    - Pepperoni: $520
-    - Funghi: $490
-    - Quattro Formaggi: $550
-    - Especial Fundamento (rúcula, jamón crudo, parmesano): $590
+    "horario": "lunes a viernes de 9:00 a 20:00, sábados de 10:00 a 18:00",
+    "horario_apertura": time(9, 0),
+    "horario_cierre": time(20, 0),
+    "servicios": """
+    💆 MASAJES Y RELAX
+    - Masaje relajante (50 min)
+    - Masaje descontracturante (50 min)
+    - Masaje de piedras calientes
+    - Day Spa & Relax (circuito completo)
 
-    🥗 ENTRADAS
-    - Focaccia con aceite de oliva: $180
-    - Bruschetta x3: $220
+    ✨ DEPILACIÓN DEFINITIVA
+    - Luz pulsada y láser
+    - Zonas pequeñas (axilas, bozo, mentón, etc.): $790
+    - Consultar precio por zona mayor
 
-    🍺 BEBIDAS
-    - Cerveza artesanal: $180
-    - Vino copa: $200
-    - Gaseosa: $100
-    - Agua: $80
+    🧖 ESTÉTICA FACIAL Y CORPORAL
+    - Limpieza de cutis
+    - Tratamientos faciales
+    - Hidrojet
+    - Sol Free (ducha solar)
+    - Cama solar
+
+    🧘 BIENESTAR
+    - Gimnasia y yoga
+    - Sauna
     """,
-    "reservas": "Se pueden hacer reservas para grupos de 4 o más personas.",
-    "delivery": "No hacemos delivery, solo para llevar o comer en el local.",
-    "numero_dueno": os.getenv("NUMERO_DUENO", ""),  # ej: whatsapp:+59891234567
+    "reservas": "Se pueden hacer reservas para todos los servicios llamando o por WhatsApp.",
+    "numero_dueno": os.getenv("NUMERO_DUENO", ""),
 }
 
-SYSTEM_PROMPT = f"""Sos el asistente virtual de {NEGOCIO['nombre']}, una {NEGOCIO['tipo']} en Montevideo, Uruguay.
+SYSTEM_PROMPT = f"""Sos el asistente virtual de {NEGOCIO['nombre']}, un {NEGOCIO['tipo']} en Montevideo, Uruguay.
 
-Tu trabajo es atender a los clientes por WhatsApp de forma amigable, rápida y profesional.
+Tu trabajo es atender a los clientes por WhatsApp de forma amigable, cálida y profesional.
 
 INFORMACIÓN DEL NEGOCIO:
 - Nombre: {NEGOCIO['nombre']}
 - Horario: {NEGOCIO['horario']}
-- Locales:
-  * Pocitos: {NEGOCIO['locales']['Pocitos']}
-  * Cordón: {NEGOCIO['locales']['Cordón']}
-  * Ciudad Vieja: {NEGOCIO['locales']['Ciudad Vieja']}
-- Delivery: {NEGOCIO['delivery']}
+- Sucursales:
+  * Punta Carretas: {NEGOCIO['locales']['Punta Carretas']}
+  * Tres Cruces: {NEGOCIO['locales']['Tres Cruces']}
+  * Centro: {NEGOCIO['locales']['Centro']}
 - Reservas: {NEGOCIO['reservas']}
 
-MENÚ:
-{NEGOCIO['menu']}
+SERVICIOS Y PRECIOS:
+{NEGOCIO['servicios']}
 
 INSTRUCCIONES:
 - Respondé siempre en español rioplatense (vos, che, etc.)
 - Sé amigable pero conciso — mensajes cortos y claros
-- Si alguien quiere hacer una reserva, pedile: nombre, fecha, hora, cantidad de personas y local
+- Si alguien quiere reservar un turno, pedile: nombre, servicio, fecha, hora y sucursal
 - Cuando confirmés una reserva, incluí la palabra RESERVA_CONFIRMADA en tu respuesta (invisible para el cliente, solo para el sistema)
 - Si preguntan algo que no sabés, decí: "Te paso con el equipo para que te ayuden mejor 🙏"
-- Usá emojis con moderación
+- Usá emojis con moderación, el tono es cálido y relajante acorde a un spa
 - Nunca inventes precios o información que no tenés
 - Si alguien saluda, saludá y preguntá en qué podés ayudar
 """
 
-MENU_BIENVENIDA = f"""¡Hola! 👋 Bienvenido a *{NEGOCIO['nombre']}*.
+MENU_BIENVENIDA = f"""¡Hola! 👋 Bienvenida/o a *{NEGOCIO['nombre']}*.
 
-¿En qué te puedo ayudar?
+¿En qué te puedo ayudar hoy?
 
-1️⃣ Ver el menú
-2️⃣ Hacer una reserva
-3️⃣ Horarios y ubicación
+1️⃣ Ver servicios y precios
+2️⃣ Reservar un turno
+3️⃣ Horarios y sucursales
 4️⃣ Hablar con el equipo"""
 
 
